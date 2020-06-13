@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#374954</color>
+    <color name="colorAccent">#D81B60</color>
+
+
+
+    <color name="splash_bg">#fbf041</color>
+    <color name="splash_txt">#17202A</color>
+    <color name="toolbar">#464646</color>
+
+
+    <color name="fab_background">#422545</color>
+
+
+</resources>
