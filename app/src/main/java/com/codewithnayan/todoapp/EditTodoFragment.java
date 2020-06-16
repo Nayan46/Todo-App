@@ -55,6 +55,9 @@ public class EditTodoFragment extends Fragment {
 
     private TodoViewModel mTodoViewModel;
 
+    private int todoId;
+
+
     TodoRoomDatabase database;
 
     @Override
@@ -110,6 +113,35 @@ public class EditTodoFragment extends Fragment {
                 return false;
             }
         });
+
+
+        todoId = getActivity().getIntent().getIntExtra("TodoId", -1);
+        if(todoId!=-1)
+        {
+            btnSave.setText(getText(R.string.edit_update));
+            ETodo todo = mTodoViewModel.getTodoById(todoId);
+            txtTitle.setText(todo.getTitle());
+            txtDescription.setText(todo.getDescription());
+            DateFormat formatter;
+            formatter = new SimpleDateFormat("yyyy-MM-dd");
+            txtDate.setText(formatter.format(todo.getTodo_date()));
+            switch (todo.getPriority())
+            {
+                case 1:
+                    rgPriority.check(R.id.edit_rb_high);
+                    break;
+
+                case 2:
+                    rgPriority.check(R.id.edit_rb_medium);
+                    break;
+
+                case 3:
+                    rgPriority.check(R.id.edit_rb_low);
+                    break;
+            }
+
+            chkIsComplete.setSelected(todo.isIs_completed());
+        }
 
         return rootView;
     }
@@ -201,13 +233,23 @@ public class EditTodoFragment extends Fragment {
         todo.setPriority(priority);
         todo.setIs_completed(chkIsComplete.isChecked());
 
-        //Save  Object into database
-        mTodoViewModel.insert(todo);
+
+        if (todoId!=-1)
+        {
+            todo.setId(todoId);
+            mTodoViewModel.update(todo);
+            Toast.makeText(getActivity(),getText(R.string.crud_update), Toast.LENGTH_SHORT).show();
+
+        }
 
 
-        Toast.makeText(getActivity(),getText(R.string.crud_save), Toast.LENGTH_SHORT).show();
+else {
+            //Save  Object into database
+            mTodoViewModel.insert(todo);
 
+            Toast.makeText(getActivity(), getText(R.string.crud_save), Toast.LENGTH_SHORT).show();
 
+        }
 
         Intent intent= new Intent(getActivity(), MainActivity.class);
         startActivity(intent);

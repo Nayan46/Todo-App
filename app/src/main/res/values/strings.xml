@@ -32,11 +32,16 @@
     <string name="edit_save">Save</string>
 
     <string name="edit_cancel_prompt">Do You Want To Return To Main?</string>
+    <string name="edit_delete_all">Do You Want To Delete ALL?</string>
+    <string name="edit_logout">Are You Sure, You Want To Logout?</string>
 
 
     <string name="crud_save">Todo Saved.</string>
+    <string name="crud_update">Todo Updated.</string>
+
     <string name="crud_deletebyid">Selected item is deleted.</string>
     <string name="crub_deleteall">All items are deleted.</string>
 
+    <string name="edit_update">Update</string>
 
 </resources>

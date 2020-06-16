@@ -32,5 +32,5 @@ public interface TodoDAO {
     LiveData<List<ETodo>> getAllTodos();
 
     @Query("SELECT * FROM todo_table WHERE id=:id")
-    ETodo getTodoById(String id);
+    ETodo getTodoById(int id);
 }

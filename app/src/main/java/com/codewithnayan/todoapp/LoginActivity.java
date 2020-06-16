@@ -21,6 +21,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        getSupportActionBar().hide();
+
         txtUsername = findViewById(R.id.login_txt_username);
         txtPassword = findViewById(R.id.login_txt_password);
 

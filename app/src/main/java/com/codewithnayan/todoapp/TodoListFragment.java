@@ -1,6 +1,7 @@
 package com.codewithnayan.todoapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -102,6 +103,37 @@ public class TodoListFragment extends Fragment {
             mTitle = itemView.findViewById(R.id.list_item_tv_Name);
             mDate = itemView.findViewById(R.id.list_item_tv_Date);
 
+
+// Setting the onclicklistner on Recycler View
+            mTitle.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    TodoAdapter adapter = new TodoAdapter(mTodoViewModel.getmAllTodos().getValue());
+                    int position = getAdapterPosition();
+                    ETodo eTodo = adapter.getTodoAt(position);
+
+                    Intent intent = new Intent(getActivity(), EditTodoActivity.class);
+                    intent.putExtra("TodoId", eTodo.getId());
+                    startActivity(intent);
+                }
+            });
+
+ // Setting the onclicklistner on Recycler View
+            mDate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    TodoAdapter adapter = new TodoAdapter(mTodoViewModel.getmAllTodos().getValue());
+                    int position = getAdapterPosition();
+                    ETodo eTodo = adapter.getTodoAt(position);
+
+                    Intent intent = new Intent(getActivity(), EditTodoActivity.class);
+                    intent.putExtra("TodoId", eTodo.getId());
+                    startActivity(intent);
+                }
+            });
+
+
+
         }
 
 
@@ -131,6 +163,21 @@ public class TodoListFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull TodoViewHolder holder, int position) {
             ETodo todo = mETodoList.get(position);
+            LinearLayout layout = (LinearLayout)((ViewGroup)holder.mTitle.getParent());
+            switch (todo.getPriority())
+            {
+                case 1:
+                    layout.setBackgroundColor(getResources().getColor(R.color.color_high_priority));
+                    break;
+
+                case 2:
+                    layout.setBackgroundColor(getResources().getColor(R.color.color_medium_priority));
+                    break;
+
+                case 3:
+                    layout.setBackgroundColor(getResources().getColor(R.color.color_low_priority));
+                    break;
+            }
             holder.bind(todo);
         }
 

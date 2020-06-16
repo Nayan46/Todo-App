@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimary">#474744</color>
     <color name="colorPrimaryDark">#374954</color>
     <color name="colorAccent">#D81B60</color>
 
@@ -12,6 +12,11 @@
 
 
     <color name="fab_background">#422545</color>
+
+
+    <color name="color_high_priority">#FD0514</color>
+    <color name="color_medium_priority">#EBF136</color>
+    <color name="color_low_priority">#62DE44</color>
 
 
 </resources>

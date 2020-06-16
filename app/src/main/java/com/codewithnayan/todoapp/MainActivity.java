@@ -1,13 +1,16 @@
 package com.codewithnayan.todoapp;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,7 +28,8 @@ public class MainActivity extends AppCompatActivity {
 
     TodoViewModel mTodoViewModel;
 
-    Toolbar toolbar;
+    AlertDialog.Builder mAlertDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +42,6 @@ public class MainActivity extends AppCompatActivity {
                 .add(R.id.list_container, mFragment)
                 .commit();
 
-
-        toolbar = findViewById(R.id.toolbarCustom);
-        setSupportActionBar(toolbar);
 
         fabAddNew = findViewById(R.id.fab_add_new_todo);
 
@@ -68,8 +69,71 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId())
         {
             case R.id.menu_delete_all:
-                mTodoViewModel.deleteAll();
+
+// setting Dialogbox for Delete all.
+                mAlertDialog = new AlertDialog.Builder(MainActivity.this);
+
+                mAlertDialog.setMessage(getString(R.string.edit_delete_all))
+                        .setCancelable(false)
+                        .setTitle(getString(R.string.app_name))
+                        .setIcon(R.drawable.todo);
+
+                mAlertDialog.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mTodoViewModel.deleteAll();
+
+                    }
+                });
+
+                mAlertDialog.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+
+                mAlertDialog.show();
+
                 break;
+
+                //setting Alertdialogbox for logout.
+
+            case R.id.menu_logout:
+
+                mAlertDialog = new AlertDialog.Builder(MainActivity.this);
+
+                mAlertDialog.setMessage(getString(R.string.edit_logout))
+                        .setCancelable(false)
+                        .setTitle(getString(R.string.app_name))
+                        .setIcon(R.drawable.todo);
+
+                mAlertDialog.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        SharedPreferences preferences = getApplicationContext().getSharedPreferences("todo_pref", 0);
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.clear();
+                        editor.commit();
+
+                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+
+                    }
+                });
+
+                mAlertDialog.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+
+                mAlertDialog.show();
+
+                break;
+
         }
         return super.onOptionsItemSelected(item);
     }
