@@ -30,8 +30,13 @@
     <string name="edit_low">Low</string>
     <string name="edit_is_completed">Is Completed</string>
     <string name="edit_save">Save</string>
-    
+
     <string name="edit_cancel_prompt">Do You Want To Return To Main?</string>
+
+
+    <string name="crud_save">Todo Saved.</string>
+    <string name="crud_deletebyid">Selected item is deleted.</string>
+    <string name="crub_deleteall">All items are deleted.</string>
 
 
 </resources>

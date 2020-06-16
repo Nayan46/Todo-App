@@ -1,12 +1,17 @@
 package com.codewithnayan.todoapp.data;
 
 import android.content.Context;
+import android.os.AsyncTask;
 
+import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.codewithnayan.todoapp.model.ETodo;
+
+import java.util.Date;
 
 @Database(entities = {ETodo.class}, version = 1, exportSchema = false)
 
@@ -27,6 +32,7 @@ public abstract class TodoRoomDatabase extends RoomDatabase {
                             TodoRoomDatabase.class, "todo.db")
                             .allowMainThreadQueries()
                             .fallbackToDestructiveMigration()
+                            .addCallback(sCallback)
                             .build();
                 }
             }
@@ -34,4 +40,36 @@ public abstract class TodoRoomDatabase extends RoomDatabase {
 
         return INSTANCE;
     }
+
+    private static class populateDbAsynchTask extends AsyncTask<ETodo, Void, Void>
+
+    {
+        private TodoDAO mTodoDAO;
+        private populateDbAsynchTask(TodoRoomDatabase db)
+        {
+            mTodoDAO = db.mTodoDAO();
+        }
+
+        //Generating Override Method (doInBackground)
+
+
+        @Override
+        protected Void doInBackground(ETodo... todos) {
+
+            Date date = new Date();
+            ETodo todo = new ETodo("Demo Title", "Demo Description", date,1, false);
+            mTodoDAO.insert(todo);
+            return null;
+        }
+    }
+
+    private static RoomDatabase.Callback sCallback = new RoomDatabase.Callback()
+    {
+        @Override
+        public void onCreate(@NonNull SupportSQLiteDatabase db) {
+            super.onCreate(db);
+            new populateDbAsynchTask(INSTANCE).execute();
+        }
+    };
+
 }

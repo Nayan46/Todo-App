@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -20,8 +21,17 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
+import com.codewithnayan.todoapp.data.TodoRoomDatabase;
+import com.codewithnayan.todoapp.model.ETodo;
+import com.codewithnayan.todoapp.viewmodel.TodoViewModel;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 
 public class EditTodoFragment extends Fragment {
@@ -29,7 +39,7 @@ public class EditTodoFragment extends Fragment {
     View rootView;
     EditText txtTitle, txtDescription, txtDate;
     RadioGroup rgPriority;
-    RadioButton rbHigh, rbMedium, rbLow;
+    RadioButton rbHigh, rbMedium, rbLow, rbSelected;
     CheckBox chkIsComplete;
     Button btnSave, btnCancel;
 
@@ -39,11 +49,23 @@ public class EditTodoFragment extends Fragment {
     DatePickerDialog mDatePicker;
 
 
+    public static final int HIGH_PRIORITY=1;
+    public static final int MEDIUM_PRIORITY=2;
+    public static final int LOW_PRIORITY=3;
+
+    private TodoViewModel mTodoViewModel;
+
+    TodoRoomDatabase database;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView =  inflater.inflate(R.layout.fragment_edit_todo, container, false);
+
+        database=TodoRoomDatabase.getDatabase(getActivity().getApplicationContext());
+
+        mTodoViewModel = ViewModelProviders.of(this).get(TodoViewModel.class);
 
         txtTitle = rootView.findViewById(R.id.edit_txt_title);
         txtDescription = rootView.findViewById(R.id.edit_txt_description);
@@ -63,7 +85,7 @@ public class EditTodoFragment extends Fragment {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                SaveTodo();
             }
         });
 
@@ -139,6 +161,56 @@ public class EditTodoFragment extends Fragment {
 
     void SaveTodo()
     {
+        ETodo todo = new ETodo();
+        Date todoDate;
+        int priority=1;
+        int checkedPriority=-1;
+
+        todo.setTitle(txtTitle.getText().toString());
+        todo.setDescription(txtDescription.getText().toString());
+
+        try {
+            DateFormat formatter;
+            formatter = new SimpleDateFormat("yyyy-MM-dd");
+            todoDate = (Date)formatter.parse(txtDate.getText().toString());
+            todo.setTodo_date(todoDate);
+        }
+
+        catch (ParseException e)
+        {
+            e.printStackTrace();
+        }
+
+        checkedPriority=rgPriority.getCheckedRadioButtonId();
+        switch (checkedPriority)
+        {
+            case R.id.edit_rb_high:
+                priority=HIGH_PRIORITY;
+                break;
+
+            case R.id.edit_rb_medium:
+                priority=MEDIUM_PRIORITY;
+                break;
+
+            case R.id.edit_rb_low:
+                priority=LOW_PRIORITY;
+                break;
+        }
+
+        // setIS_completed is from ETOdo class and chkIsComplete is from variable.
+        todo.setPriority(priority);
+        todo.setIs_completed(chkIsComplete.isChecked());
+
+        //Save  Object into database
+        mTodoViewModel.insert(todo);
+
+
+        Toast.makeText(getActivity(),getText(R.string.crud_save), Toast.LENGTH_SHORT).show();
+
+
+
+        Intent intent= new Intent(getActivity(), MainActivity.class);
+        startActivity(intent);
 
     }
 

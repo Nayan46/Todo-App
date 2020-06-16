@@ -11,6 +11,13 @@
 <!--    <include />-->
 
 
+    <FrameLayout
+        android:id="@+id/list_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </FrameLayout>
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add_new_todo"
         android:layout_width="wrap_content"

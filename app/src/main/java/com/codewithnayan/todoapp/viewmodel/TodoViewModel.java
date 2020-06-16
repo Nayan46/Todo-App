@@ -23,8 +23,21 @@ public class TodoViewModel extends AndroidViewModel {
         mAllTodos = mTodoRepository.getmAllTodoList();
     }
 
+    public LiveData<List<ETodo>> getmAllTodos(){
+        return mAllTodos;
+    }
+
     public void insert(ETodo todo)
     {
         mTodoRepository.insert(todo);
+    }
+
+    public void deleteById(ETodo todo)
+    {
+        mTodoRepository.deleteById(todo);
+    }
+
+    public void deleteAll() {
+        mTodoRepository.deleteAll();
     }
 }
