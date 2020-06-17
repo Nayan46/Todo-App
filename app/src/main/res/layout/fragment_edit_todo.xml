@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".EditTodoFragment">
+    tools:context=".EditTodoFragment"
+    android:background="@drawable/todo_bg">
 
     <EditText
         android:id="@+id/edit_txt_title"
@@ -111,6 +112,7 @@
             android:layout_marginLeft="35dp"
             android:layout_marginTop="15dp"
             android:layout_weight="1"
+            android:elevation="15dp"
             android:text="@string/edit_save" />
 
         <Button
